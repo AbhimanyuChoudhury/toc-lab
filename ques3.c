@@ -20,5 +20,31 @@ int itemChoice;
 scanf("%d",&itemChoice);
 printf("Price to be paid: %d\n",prices[itemChoice]);
 
+int paid=0;
 
-} 
+while(paid<prices[itemChoice]){
+	printf("Enter Coin:");
+	int coin;
+	scanf("%d",&coin);
+
+	if(coin==1){
+		paid = paid+1;
+	}
+	if(coin==5){
+		paid = paid+5;
+	}
+	if(coin==10){
+		paid= paid+10;
+	}
+
+	if(prices[itemChoice]-paid>0)
+		printf("Amount remaining = %d\n",prices[itemChoice]-paid );
+	
+}
+
+if(prices[itemChoice]-paid<=0){
+	printf("Congrats on buying item %d\n",itemChoice );
+	printf("Your Change %d\n",paid-prices[itemChoice]);
+}
+
+}
