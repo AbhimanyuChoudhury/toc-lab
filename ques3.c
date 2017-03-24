@@ -1,93 +1,109 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#define MAX 100
+#define NO_ITEMS 7
 
-typedef struct stack
-{
-	char data[MAX];
-	int top;
-}stack;
-
-stack s;
-
-void push(char data){
-	s.data[++s.top] = data;
-}
-
-char pop(){
-	return s.data[s.top--];
-}
+int prices[] = {10,25,5,7,9,13,20};
+int currency[] = {1,5,10};
 
 
-int precedence(char c){
-	if(c == '(')
-		return 0;
-	if(c == '+' )
-		return 1;
-	if(c == '.' )
-		return 2;
-	else
-		return -1;
-}
+void startState();
+void incompleteState(int itemChoice,int paid);
+void invalidState(int itemChoice, int paid);
+void finishingState();
+void finishedState();
 
-int typeof1(char c){
 
-	if(c == '(')
-		return 1;
-	if(c == ')')
-		return 2;
-	if(c == '+' || c == '.')
-		return 3;
-	if (c == ' ')
-		return 4;
-	else
-		return 5;
+void main(){
+
+const char *Itemlist[7];
+Itemlist[0] = "Expresso  ";
+Itemlist[1] = "Lemon Tea ";
+Itemlist[2] = "Cappuchino";
+Itemlist[3] = "Ice Tea   ";
+Itemlist[4] = "Coke      ";
+Itemlist[5] = "Fanta     ";
+Itemlist[6] = "Sprite    ";
+
+printf("Items and their prices\n");
+int i;
+for(i=0;i<NO_ITEMS;i++)
+       printf("%d\t%s\tPrice %d\n",i+1,Itemlist[i],prices[i]);
+
+printf("Acceptable currency is 1,5,10\n");
+
+startState();
 }
 
 
-int main() {
+void startState(){
 
-char array[20];	
-char p;
-char *c;
+printf("Choose Item: ");
+int itemChoice;
+scanf("%d",&itemChoice);
+printf("Price to be paid: %d\n",prices[itemChoice-1]);
 
-s.top=-1;
-
-printf("Enter the infix expression");
-scanf("%s",array);
-c = array;
-
-while(*c != '\0'){
-
-	int x = typeof1(*c);
-	
-	if(x==5)
-		printf("%c",*c );
-
-	else if(x == 1)
-		push(*c);
-	
-	else if(x == 2){
-		while(( p = pop())!='(')
-       	 	printf("%c",p);
-    }
- 
-    else {
-
-     	while(precedence(s.data[s.top]) >= precedence(*c) )
-      		printf("%c",pop());
-      	push(*c);
-    }
-
-	c++;
+int paid=0;
+incompleteState(itemChoice-1,paid);
 }
 
-while(s.top != -1){
-        printf("%c",pop());
-    }
- 
 
-printf("\n");
-return 0;
 
+void incompleteState(int itemChoice, int paid){
+
+//int paid=0;
+
+while(paid<prices[itemChoice]){
+       printf("Enter Coin:");
+       int coin;
+       scanf("%d",&coin);
+
+       if(coin==1){
+              paid = paid+1;
+       }
+       else if(coin==5){
+              paid = paid+5;
+       }
+       else if(coin==10){
+              paid= paid+10;
+       }
+
+       else{
+              invalidState(itemChoice,paid);
+              break;
+       }
+
+       if(prices[itemChoice]-paid>0)
+              printf("Paid = %d,  Amount remaining = %d\n",paid,prices[itemChoice]-paid );
+
+}
+
+if(prices[itemChoice]-paid<=0){
+       if(prices[itemChoice]-paid<0)
+              printf("Your Change is: %d\n", paid-prices[itemChoice]);
+       finishingState();
+}
+
+}
+
+void invalidState(int itemChoice, int paid){
+       printf("Please Enter Valid Coin\n");
+       incompleteState(itemChoice,paid);
+}
+
+
+
+void finishingState(){
+       printf("Thank You For Buying Our Item\n");
+       printf("Do You Want Another Item- Y(Yes) or N(No):");
+       char choice;
+       scanf(" %c",&choice);
+       if(choice=='Y')
+              startState();
+       if(choice=='N')
+              finishedState();
+}
+
+void finishedState(){
+       printf("Thank You! Have a nice day\n");
 }
