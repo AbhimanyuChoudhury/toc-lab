@@ -1,6 +1,6 @@
 TOC LABSHEET 1
 
-1.Abhimanyu Choudhury (AbhimanyuChoudhury)
-2.Koushik Shankar (Koushik1)
-3.Saurabh Datir (dinosaurabh)
+1.Abhimanyu Choudhury 
+2.Koushik Shankar
+3.Saurabh Datir
 
